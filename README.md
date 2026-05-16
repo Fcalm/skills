@@ -1,1 +1,2 @@
-# skills
+##关于skills
+使用前请先阅读skill中的介绍文档，确保这是你需要的skill
