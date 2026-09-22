@@ -1,17 +1,9 @@
-# 提示
+# build-resume
 
-请在使用前阅读此文档，确保以最佳方式生成简历。
+把简历素材（markdown/txt 草稿、聊天里口述的经历、参考排版图片）转成一份可在线编辑、可一键导出 PDF 的单页 HTML 简历。
 
-## 使用方式
+- `assets/resume-template.html` —— 版式、打印样式、编辑控件（只改打印字号，不要动内容和脚本结构）
+- `assets/resume-data.js` —— 内容存储：`window.RESUME_DATA = { version, content }`，AI 直接编辑 `content` 字段
+- `scripts/export-pdf.sh` —— 无头 Edge/Chrome 导出 PDF 并报告页数
 
-1. 输入“制作简历”等关键词，或输入 `/make-resume`。
-2. 按照引导输入文本，或复制文件地址。
-3. 认真回答问题，确认细节。
-4. 预览文本生成后要认真进行确认，如有错误，请提交修改要求。
-5. 在 `/build-resume/output` 中查看生成的简历文档。
-
-## 一个小请求
-
-使用后，如果可以，请将生成的简历文档发送至 `3282167452@qq.com`。我将非常感激。
-
-（仅用于改进 skill，不会泄露或使用你的个人隐私。）
+浏览器里打开 `简历.html` 后可直接编辑文字、增删板块，连接数据文件后改动自动写回 `简历数据.js`。

@@ -1,195 +1,44 @@
 ---
-name: make resume
-description: 针对特定 JD 生成高匹配度中文简历。触发词：生成简历、写简历、改简历、JD匹配、针对JD、投简历。命令：/make resume
-allowed-tools: [Bash, Read, Write, Skill, WebFetch]
+name: build-resume
+description: Turn resume material (markdown/txt drafts, experience dictated in chat, reference layout screenshots) into a single-page HTML resume that supports in-browser editing and one-click PDF export. Use whenever the user mentions 简历/resume/CV/job-application documents, asks to convert or format a resume as HTML/PDF, sends a resume draft for polishing or layout, or wants to export one to PDF — even if they never say "HTML" or "one page".
 ---
 
-# 简历生成 Skill
+# HTML Resume Template + Online Editing + PDF Export
 
-你是一个专业的简历顾问，帮助用户针对特定 JD（职位描述）生成高匹配度的中文简历。
+The resume uses a **two-file architecture** that separates template from content:
 
-## 核心规则
+- `assets/resume-template.html` — layout, print styles, and edit controls only. **Never store content here and never change its CSS or `<script>`** — only adjust the `@media print` font sizes (step 3 below).
+- `assets/resume-data.js` — the single content store: `window.RESUME_DATA = { version, content }`, where `content` is the HTML string rendered inside `.page`. **All content edits — by you (the AI) or by the user — end up in this file.**
 
-1. **默认中文**：所有输出默认中文，仅用户明确要求时才出外语版本
-2. **逐步引导**：每轮 2-3 个问题，逐步深挖，不一次性列出所有问题
-3. **合理编造**：用户信息不足时编造合理内容补全，标记 `[建议确认]` 供用户审核
-4. **格式固定**：最终简历格式严格参照用户项目中的 `简历内容.txt`，具体排版要求见步骤⑤.5
-5. **单页限制**：所有内容控制在 A4 单页以内，内容偏少时应适当补充以接近填满一页
-6. **仅输出 .docx**：唯一输出格式为 Word 文档，不提供 txt 降级方案
-7. **禁用灰色**：所有文字禁止使用灰色，确保打印清晰可辨
-8. **学校标签**：985/211/双一流高校必须在教育经历中添加对应标签
+Data flow: AI edits `简历数据.js` directly on disk (bump `version` each time); the user's browser edits are written back to the same file through the File System Access API (Edge/Chrome), so file and browser never diverge.
 
-## 执行流程
+## Workflow
 
-### 步骤① — 获取 JD
+1. **Collect material**: extract all experience from the user's markdown/txt draft or their message. If material is incomplete, generate anyway and mark gaps with a red `<span class="placeholder">TODO</span>`, then mention the gaps when delivering.
+2. **Generate the pair**: copy BOTH files to the output location (e.g. next to the user's draft): template → `简历.html`, data → `简历数据.js` (the template loads exactly `<script src="简历数据.js">`, so keep this filename). Then put the resume content into the data file's `content` field. Structure mapping for the content HTML:
+   - Two centered header lines: `.header .contact` (**bold name** first, then phone, email, GitHub link) and `.header .edu` (school | major | 2023~present (class of 20XX))
+   - `.section-title`: section headings (blue + underline), e.g. "Experience", "Projects", "Core Skills"
+   - `.entry-title`: experience entry title (gray bar), format "Project/Company ｜ Role"; dates go in `<span class="date">`
+   - `.link-row`: GitHub or other link row, directly below the entry title
+   - List hierarchy: `ul.l1` (• module level, e.g. "Overview:" "Key work:", lead words in `<span class="lead">`) → `ul.l2` (◦ work items, each starting with a **bold mechanism name** + colon) → `ul.l3` (▪ sub-items / version comparisons)
+   - Emphasis: `<b>` for mechanisms/conclusions; `<span class="hl">` (blue bold) for quantified metrics and goals; `<code>` for commands and file names
+   - Fix typos and stray punctuation in the source material along the way; normalize casing of tech terms (python → Python)
+   - The `content` string is a JS template literal: escape backticks, `\` and `${` if the material contains them
+3. **Fit one page**: default print styles (12.5px/1.48) fit roughly two dense projects + a skills section. Two ways to tune: (a) the template's toolbar has **字号 / 行距 dropdowns** that override the print styles at runtime and persist per browser in localStorage — tell users to use these and preview before exporting; (b) for a generated default, edit `@media print` in the template (`font-size` floor 11px, `line-height` floor 1.35; sparse content can go up to 13.5px/1.55). Re-export and verify the page count after every adjustment. Backgrounds (gray entry-title bars, code backgrounds) are force-printed via `print-color-adjust: exact`, so they survive the browser's default "no background graphics" mode — do not remove that rule.
+4. **Export PDF**: run `scripts/export-pdf.sh <html path> [pdf output path]`. The script exports via headless Edge/Chrome (the template renders the data file synchronously, so headless export includes the content) and reports the page count. The PDF defaults to the same directory and basename as the HTML.
+5. **Verify**: confirm the page count is 1. If content is dense or font sizes were just compressed, render the PDF to PNG and check nothing is clipped at the bottom (pymupdf works). Deliver both the html and pdf paths, and remind the user the two files must stay together.
 
-询问用户提供 JD：
+## When to edit which file
 
-> 请提供目标岗位的 JD，你可以：
-> - 直接粘贴 JD 文本
-> - 提供招聘页面的 URL 链接
+- **AI changes content** (user asks to rewrite a bullet, add a project, fix wording): edit `简历数据.js` directly, bump `version`. If the user has the page open, tell them to click "↺ 恢复原文" (reloads from disk) or refresh.
+- **User edits in browser**: click "✏️ 编辑简历", type; changes auto-save. First time, they must click "🔗 连接数据文件" and pick `简历数据.js` once (grant read-write permission); after that every edit is written straight to the file (a per-browser-session re-grant may be asked). Without a connection, edits fall back to localStorage (restored on next load) and the PDF button still works.
+- **Adding / reordering / removing blocks without touching HTML**: in edit mode a second toolbar row appears with `＋ 板块 / ＋ 项目条 / ＋ 一级要点 / ＋ 二级要点 / ＋ 三级要点` and `⬆ 上移 / ⬇ 下移 / 🗑 删除`. New blocks are inserted after the block the caret is in, come pre-styled with placeholder text selected (typing replaces it), and nested levels fall back to the last matching parent item when the caret is not inside one. `🗑 删除` confirms with a text preview before removing. Point the user at these buttons instead of editing HTML by hand; the underlying markup they generate is exactly the structure described in step 2.
+- "↺ 恢复原文" discards in-browser edits and reloads from the data file — the way to pick up AI edits made while the page was open.
+- "📄 导出 PDF" prints the current DOM, so it always includes the latest edits whether they came from disk or the browser.
 
-**URL 处理**：如果用户提供 URL，使用以下命令抓取内容：
-```bash
-python build-resume/scripts/jd_parser.py "<url>"
-```
+## Layout spec (from the reference template — keep consistent when editing content)
 
-如果抓取失败，提示用户改用粘贴文本。
-
-### 步骤② — 解析 JD + 确认岗位
-
-基于 JD 内容，分析并展示：
-
-```
-解析结果：
-- 岗位：<岗位名称>
-- 公司：<公司名>
-- 核心要求：
-  1. <要求1>
-  2. <要求2>
-  ...
-- 关键技能词：<词1>、<词2>、...
-- 经验层级：<实习/初级/中高级>
-```
-
-然后向用户确认：
-
-> 以上解析是否准确？求职岗位是「<岗位名>」吗？需要调整的话请告诉我。
-
-### 步骤③ — 引导提问
-
-**提问维度**：
-
-1. **JD 需求映射**：将 JD 每条职责转化为具体项目经历问题
-   - "JD 要求用户增长经验 → 你有做过用户增长相关的项目吗？具体通过什么手段？数据效果如何？"
-2. **查漏补缺**：JD 看重但用户未提及的领域，主动追问
-   - "JD 提到需要数据分析能力，你有用过 SQL、Python、BI 工具的经历吗？"
-3. **GPA 确认**：询问用户 GPA 及专业排名
-   - "你的 GPA 是多少？在专业里大概排名前百分之多少？"
-   - 若 GPA 排名专业前 20%，在教育经历中展示；否则不展示
-
-**提问节奏**：每轮 2-3 个问题，用户回答后再追问下一轮。
-
-**终止条件**：覆盖 JD 核心需求后结束提问，输出一份"需要准备的内容清单"。
-
-### 步骤④ — 接收用户内容
-
-> 请根据上面的问题，准备好以下内容后一次性提供给我：
-> - 实习经历（如有）
-> - 项目经历（2-3 个最相关的）
-> - 个人技能
->
-> 你可以直接粘贴文本，或提供 txt/docx 文件路径。
-
-**文件读取**：
-- txt 文件：Read 工具直接读取
-- docx 文件：Skill 工具调用 docx skill 读取内容
-- 读取失败则要求用户重新提供或直接粘贴
-
-### 步骤⑤ — 生成简历
-
-1. **内容整理**：基于 JD 分析和用户提供的内容：
-   - 筛选最匹配的经历、排序优先级，控制总量不超出 A4 单页
-   - 每个实习/项目经历的描述点不超过 3 条
-   - 描述做 JD 关键词对齐（不改变用户提供的事实）
-   - 匹配度低或细节不足时，自动编造合理内容补全
-   - 编造内容必须标记 `[建议确认]`
-   - 不生成"专业技能"子板块，个人优势聚焦于综合能力
-   - 学校如果是 985/211/双一流，必须在校名后添加对应标签（如 `南昌大学 · 211 / 双一流`）
-   - GPA 排名专业前 20% 时才在教育经历中展示，否则不展示
-   - 简历不满一页时，优先补充实习/项目经历的描述细节、主修课程、个人优势条目，确保接近填满一页
-
-2. **组装简历**：使用 resume_builder.py 生成格式化文本：
-   ```bash
-   python build-resume/scripts/resume_builder.py '<json_data>'
-   ```
-   JSON 结构：
-   ```json
-   {
-     "name": "姓名",
-     "contact": {"phone": "138-xxxx", "email": "xx@qq.com"},
-     "photo": true,
-     "education": {
-       "school": "XX大学",
-       "school_tags": "985 / 双一流",
-       "degree": "本科",
-       "major": "专业",
-       "time": "2022.09 - 2026.06",
-       "gpa": {"value": "3.7/4.0", "rank": "专业前5%"},
-       "courses": ["课程1", "课程2"]
-     },
-     "internships": [
-       {"title": "实习公司/岗位", "role": "角色", "time": "时间", "points": ["描述1"]}
-     ],
-     "projects": [
-       {"title": "项目名", "role": "角色", "time": "时间", "points": ["描述1", "描述2"]}
-     ],
-     "skills": ["技能1", "技能2"],
-     "custom_sections": {"strengths": "自定义优势文本"}
-   }
-   ```
-   - `school_tags`：仅当学校为 985/211/双一流时填写，否则省略
-   - `gpa`：仅当 GPA 排名专业前 20% 时填写，否则省略
-   - `photo`：固定为 true，排版时预留照片位置
-
-3. **预览确认**：展示生成的简历文本，询问用户是否需要修改。
-
-4. **检测 docx skill**：在排版前，先确认 docx skill 是否可用：
-   - 如果 docx skill 可用 → 直接调用排版
-   - 如果 docx skill 不可用 → 告知用户：
-     > 此 skill 仅支持输出 Word (.docx) 格式，需要 docx skill 来排版。docx skill 当前未安装，是否同意我帮你安装？
-     - 用户同意 → 引导安装 docx skill，安装完成后继续排版
-     - 用户拒绝 → 终止执行，告知：
-       > 无法继续：本 skill 仅支持 .docx 格式输出，拒绝安装 docx skill 将无法生成简历文件。请确认后重试。
-
-5. **输出 .docx**：调用 docx skill，严格按以下格式排版：
-
-   **页面设置**：
-   - 纸张：A4，所有内容必须控制在一页以内
-   - 页边距：适当（上下左右约 2cm），确保内容紧凑
-
-   **个人信息区**：
-   - 第一行：姓名（三号字体，约 16pt，左对齐）+ 照片占位框（右对齐，尺寸约 3.5cm × 4.5cm，内写"照片"）
-   - 第二行：联系方式（五号字体，黑色），格式：`电话：138-xxxx-xxxx    邮箱：xx@qq.com`
-   - 不展示求职意向
-
-   **全局字体颜色规则**：
-   - 联系方式、时间统一使用黑色（#000000）
-   - 禁止任何文字使用灰色，确保打印清晰可辨
-
-   **字体排版**：
-   - 姓名：三号字体（约 16pt），左对齐
-   - 联系方式：五号字体，黑色（#000000）
-   - 正文：五号字体，单倍行距，禁止使用灰色
-   - 各板块之间紧凑排列，确保不超出 A4 单页
-   - 简历不满一页时，适当增加实习/项目经历的描述细节、主修课程、个人优势条目
-
-   **小标题样式**（教育经历、实习经历、项目经历、个人优势）：
-   - 使用蓝色分割线样式，视觉上与正文区分
-
-   **内容结构**：
-   - 教育经历：
-     - 第一行：学校 · 985 / 211 / 双一流标签（如有）· 学历 · 专业，时间右对齐同一行（时间使用黑色）
-     - 第二行（如有）：主修课程：xxx、xxx（仅列与岗位相关的课程）
-     - 第三行（如有）：GPA：x.x（专业前x%），仅 GPA 排名专业前 20% 时展示
-   - 实习经历：标题 | 角色，时间右对齐同一行（黑色），每个经历描述点不超过 3 条，采用 STAR 格式（情境-任务-行动-结果）+ 四字概括前缀，格式参考 `build-resume/resume-format.txt`
-   - 项目经历：同实习经历格式
-   - 个人优势：分点列出，3-5 条与岗位需求高度相关的综合能力，不含"专业技能"子板块
-
-   **参考格式**：项目根目录的 `简历内容.txt` 和 `build-resume/resume-format.txt`
-
-6. **输出路径**：`build-resume/output/简历_<姓名>_<岗位>.docx`
-
-## 注意事项
-
-- 全程用中文与用户交流，保持专业、友善的语气
-- 用户的真实经历优先于编造内容
-- 编造的内容必须合理、符合岗位常识，并标记 `[建议确认]`
-- 简历格式始终参照项目根目录的 `简历内容.txt` 和 `build-resume/resume-format.txt`
-- 所有脚本路径以 `build-resume/` 开头（skill 运行时 CWD 是项目根目录）
-- 唯一输出格式为 .docx，不支持降级为 txt
-- 联系方式和时间使用黑色（#000000），全文禁用灰色字体
-- 简历左上角预留照片占位框，姓名与照片同行（姓名左对齐，照片右对齐）
-- 删除求职意向行，联系方式放在姓名下一行
-- 985/211/双一流高校必须添加标签，GPA 排名专业前 20% 才展示
-- 简历不满一页时，通过补充经历细节、主修课程、个人优势等方式填满
+- Section titles: large bold blue text with a blue bottom border; entry titles: gray bar (#f0f0f0), bold black text, full row width
+- Three bullet levels: • → ◦ → ▪, hanging indents, bold lead words
+- Black bold for mechanisms/conclusions, blue bold (.hl) for quantified metrics, gray-background monospace (code) for commands and file names
+- Serif font stack (Times New Roman/SimSun), 13.5px body, 1.5 line-height on screen; A4 white card, `@page` margins 8mm/11mm

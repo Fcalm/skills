@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>范炜乾 - 简历</title>
+<style>
+  @page { size: A4; margin: 8mm 11mm; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #e8e8e8;
+    font-family: "Times New Roman", "SimSun", "Songti SC", "Microsoft YaHei", serif;
+    font-size: 13.5px;
+    color: #111;
+    line-height: 1.5;
+  }
+
+  .page {
+    max-width: 830px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 34px 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+
+  .header { text-align: center; margin-bottom: 10px; }
+  .header .name { font-weight: bold; font-size: 1.18em; letter-spacing: 2px; }
+  .header .contact { font-size: 1em; color: #222; }
+  .header .edu { font-size: 1em; margin-top: 4px; color: #222; }
+  .header .sep { margin: 0 .5em; color: #999; }
+  .header a { color: #2E5AAC; text-decoration: none; }
+  .header a:hover { text-decoration: underline; }
+  .github-icon { vertical-align: -2px; margin-right: 3px; }
+
+  .section-title {
+    color: #1F4E9F;
+    font-size: 1.45em;
+    font-weight: bold;
+    border-bottom: 2px solid #1F4E9F;
+    padding-bottom: 3px;
+    margin: 14px 0 8px 0;
+  }
+
+  .entry-title {
+    color: #111;
+    font-weight: bold;
+    font-size: 1.11em;
+    margin: 10px 0 5px 0;
+    background: #f0f0f0;
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+  .entry-title .role { color: #1F4E9F; }
+  .entry-title .date { font-weight: normal; color: #333; }
+
+  .link-row { margin: 3px 0 5px 0; font-size: 1.03em; }
+  .link-row a { font-weight: bold; text-decoration: underline; }
+
+  ul { list-style: none; }
+  ul.l1 > li { margin: 4px 0; padding-left: 1.1em; text-indent: -1.1em; }
+  ul.l1 > li::before { content: "•"; font-weight: bold; margin-right: .45em; }
+  ul.l2 { margin: 2px 0 2px 1.2em; }
+  ul.l2 > li { margin: 3px 0; padding-left: 1.2em; text-indent: -1.2em; }
+  ul.l2 > li::before { content: "◦"; margin-right: .45em; }
+  ul.l3 { margin: 2px 0 2px 1.6em; }
+  ul.l3 > li { margin: 3px 0; padding-left: 1.1em; text-indent: -1.1em; }
+  ul.l3 > li::before { content: "▪"; margin-right: .45em; }
+
+  b, strong { font-weight: bold; }
+  .hl { color: #2E5AAC; font-weight: bold; }
+  .lead { font-weight: bold; }
+  code {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: .93em;
+    background: #f2f2f2;
+    color: #444;
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+  a { color: #2E5AAC; }
+
+  /* ===== 工具条（打印时隐藏） ===== */
+  .edit-bar {
+    position: fixed; top: 12px; right: 16px; z-index: 9;
+    display: flex; flex-direction: column; gap: 6px; align-items: flex-end;
+    font-family: "Microsoft YaHei", sans-serif;
+  }
+  .edit-bar .bar-row { display: flex; gap: 8px; align-items: center; }
+  .bar-label { font-size: 12px; color: #1F4E9F; }
+  #blockBar button { padding: 4px 10px; font-size: 12px; }
+  .edit-bar button {
+    padding: 6px 14px; border: 1px solid #1F4E9F; background: #fff;
+    color: #1F4E9F; border-radius: 4px; cursor: pointer; font-size: 13px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.12);
+  }
+  .edit-bar button:hover { background: #1F4E9F; color: #fff; }
+  .edit-bar label { font-size: 12px; color: #1F4E9F; display: flex; align-items: center; gap: 4px; }
+  .edit-bar select {
+    padding: 4px 4px; border: 1px solid #1F4E9F; border-radius: 4px;
+    color: #1F4E9F; font-size: 12px; background: #fff; cursor: pointer;
+  }
+  #saveHint { font-size: 12px; color: #555; background: rgba(255,255,255,.92); padding: 3px 8px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.1); max-width: 420px; }
+  .page[contenteditable="true"] { outline: 2px dashed #2E5AAC; outline-offset: 6px; caret-color: #2E5AAC; }
+
+  @media print {
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { background: #fff; font-size: 12.5px; line-height: 1.48; }
+    .page { box-shadow: none; margin: 0; max-width: none; padding: 0; }
+    .header { margin-bottom: 8px; }
+    .section-title { margin: 11px 0 6px 0; padding-bottom: 2px; border-bottom-width: 1.5px; }
+    .entry-title { margin: 8px 0 4px 0; padding: 3px 8px; }
+    .link-row { margin: 2px 0 4px 0; }
+    ul.l1 > li { margin: 3px 0; }
+    ul.l2 { margin: 1px 0; }
+    ul.l2 > li { margin: 2px 0; }
+    .edit-bar { display: none; }
+    .page[contenteditable="true"] { outline: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <p style="color:#888;text-align:center;margin-top:40px">正在加载简历内容…（需要同目录下的 简历数据.js）</p>
+</div>
+
+<!-- ================= 工具条 ================= -->
+<div class="edit-bar">
+  <div class="bar-row">
+    <button id="editBtn">✏️ 编辑简历</button>
+    <button id="resetBtn" style="display:none">↺ 恢复原文</button>
+    <button id="pdfBtn">📄 导出 PDF</button>
+    <button id="connectBtn">🔗 连接数据文件</button>
+    <label>字号
+      <select id="fontSel">
+        <option>11</option><option>11.5</option><option>12</option>
+        <option selected>12.5</option><option>13</option><option>13.5</option>
+      </select>
+    </label>
+    <label>行距
+      <select id="lhSel">
+        <option>1.35</option><option>1.4</option>
+        <option selected>1.48</option><option>1.55</option><option>1.65</option>
+      </select>
+    </label>
+    <span id="saveHint"></span>
+  </div>
+  <div class="bar-row" id="blockBar" style="display:none">
+    <span class="bar-label">插入：</span>
+    <button data-ins="section">＋ 板块</button>
+    <button data-ins="entry">＋ 项目条</button>
+    <button data-ins="l1">＋ 一级要点</button>
+    <button data-ins="l2">＋ 二级要点</button>
+    <button data-ins="l3">＋ 三级要点</button>
+    <span class="bar-label">当前块：</span>
+    <button data-op="up">⬆ 上移</button>
+    <button data-op="down">⬇ 下移</button>
+    <button data-op="del">🗑 删除</button>
+  </div>
+</div>
+
+<!-- 内容存储层：简历数据.js（AI 和浏览器都读写这个文件） -->
+<script src="简历数据.js"></script>
+<script>
+(async function () {
+  var page = document.querySelector('.page');
+  var editBtn = document.getElementById('editBtn');
+  var resetBtn = document.getElementById('resetBtn');
+  var pdfBtn = document.getElementById('pdfBtn');
+  var connectBtn = document.getElementById('connectBtn');
+  var fontSel = document.getElementById('fontSel');
+  var lhSel = document.getElementById('lhSel');
+  var hint = document.getElementById('saveHint');
+  var editing = false, timer = null;
+  var fileHandle = null, perm = 'closed', dataVersion = 0;
+
+  // ---------- 打印字号 / 行距设置（仅影响 PDF 输出，选择会记住） ----------
+  var prefStyle = document.createElement('style');
+  document.head.appendChild(prefStyle); // 放在主样式之后，同优先级下覆盖默认值
+  function applyPref(showHint) {
+    prefStyle.textContent = '@media print { body { font-size:' + fontSel.value +
+      'px; line-height:' + lhSel.value + '; } }';
+    try {
+      localStorage.setItem('resume_print_pref',
+        JSON.stringify({ s: fontSel.value, l: lhSel.value }));
+    } catch (e) {}
+    if (showHint) hint.textContent = '打印字号/行距已更新，导出 PDF 前建议先预览确认一页';
+  }
+  try {
+    var pref = JSON.parse(localStorage.getItem('resume_print_pref') || 'null');
+    if (pref) {
+      if (pref.s) fontSel.value = pref.s;
+      if (pref.l) lhSel.value = pref.l;
+    }
+  } catch (e) {}
+  applyPref(false);
+  fontSel.addEventListener('change', function () { applyPref(true); });
+  lhSel.addEventListener('change', function () { applyPref(true); });
+
+  // ---------- IndexedDB（记住数据文件句柄，下次免重新选择） ----------
+  function idbOpen() {
+    return new Promise(function (res, rej) {
+      var r = indexedDB.open('resume-fs', 1);
+      r.onupgradeneeded = function () { r.result.createObjectStore('kv'); };
+      r.onsuccess = function () { res(r.result); };
+      r.onerror = function () { rej(r.error); };
+    });
+  }
+  function idbGet(k) {
+    return idbOpen().then(function (db) {
+      return new Promise(function (res, rej) {
+        var t = db.transaction('kv').objectStore('kv').get(k);
+        t.onsuccess = function () { res(t.result); };
+        t.onerror = function () { rej(t.error); };
+      });
+    });
+  }
+  function idbSet(k, v) {
+    return idbOpen().then(function (db) {
+      return new Promise(function (res, rej) {
+        var t = db.transaction('kv', 'readwrite').objectStore('kv').put(v, k);
+        t.onsuccess = function () { res(); };
+        t.onerror = function () { rej(t.error); };
+      });
+    });
+  }
+
+  // ---------- 数据文件的序列化 / 解析 ----------
+  function serialize(content, version) {
+    var esc = content.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
+    return '// ============================================================\n' +
+      '// 简历内容数据文件（存储层）\n' +
+      '// - AI 修改内容：直接编辑下方 content 字段（保持 HTML 结构），改完把 version 加 1\n' +
+      '// - 用户修改：在浏览器里打开 简历.html 编辑，改动会自动写回本文件\n' +
+      '// - 简历.html 只负责模板样式和编辑控件，不存内容\n' +
+      '// ============================================================\n' +
+      'window.RESUME_DATA = {\n  version: ' + version + ',\n  content: `' + esc + '`\n};\n';
+  }
+  function parseData(text) {
+    var win = { RESUME_DATA: null };
+    new Function('window', text + '\n;return window.RESUME_DATA;')(win);
+    return win.RESUME_DATA;
+  }
+
+  function render(content) { page.innerHTML = content; }
+
+  // 从磁盘数据文件读取最新内容（AI 改完文件后点「恢复原文」或刷新即可同步）
+  async function loadFromDisk() {
+    var text = await (await fileHandle.getFile()).text();
+    var data = parseData(text);
+    if (data && data.content) {
+      dataVersion = data.version || 0;
+      render(data.content);
+    }
+  }
+
+  // ---------- 持久化：已连接数据文件则写回磁盘，否则退回 localStorage ----------
+  var canUseFsApi = 'showOpenFilePicker' in window;
+
+  async function writeToDisk() {
+    try {
+      perm = await fileHandle.queryPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') {
+        hint.textContent = '数据文件权限已失效，点击「🔗 重连数据文件」继续自动保存';
+        return;
+      }
+      var w = await fileHandle.createWritable();
+      await w.write(serialize(page.innerHTML, dataVersion + 1));
+      await w.close();
+      dataVersion += 1;
+      hint.textContent = '✓ 已保存到 简历数据.js (v' + dataVersion + ')';
+    } catch (e) {
+      hint.textContent = '写回文件失败：' + e.message;
+    }
+  }
+
+  function persist() {
+    clearTimeout(timer);
+    hint.textContent = '保存中…';
+    timer = setTimeout(function () {
+      if (fileHandle && canUseFsApi) { writeToDisk(); return; }
+      try {
+        localStorage.setItem('resume_fallback', page.innerHTML);
+        hint.textContent = '✓ 已暂存到浏览器（点击「🔗 连接数据文件」可写入文件）';
+      } catch (e) {
+        hint.textContent = '保存失败（浏览器隐私模式）';
+      }
+    }, 500);
+  }
+
+  // ---------- 初始加载 ----------
+  if (window.RESUME_DATA && window.RESUME_DATA.content) {
+    dataVersion = window.RESUME_DATA.version || 0;
+    render(window.RESUME_DATA.content);
+  } else {
+    hint.textContent = '未找到简历内容：请确认 简历数据.js 与本文件在同一目录';
+  }
+
+  // 尝试重连上次的数据文件（每次打开浏览器需点一次授权）
+  if (canUseFsApi) {
+    try {
+      var h = await idbGet('dataFile');
+      if (h && (await h.queryPermission({ mode: 'readwrite' })) === 'granted') {
+        fileHandle = h;
+        await loadFromDisk();
+        connectBtn.textContent = '🔗 重连数据文件';
+        connectBtn.style.display = 'none';
+        hint.textContent = '已连接 简历数据.js (v' + dataVersion + ')，编辑将自动写回文件';
+      }
+    } catch (e) { /* 句柄失效则忽略 */ }
+  } else {
+    connectBtn.style.display = 'none';
+  }
+
+  // 未连接数据文件时，恢复浏览器暂存（避免刷新后编辑丢失）
+  if (!fileHandle) {
+    try {
+      var fb = localStorage.getItem('resume_fallback');
+      if (fb && fb !== page.innerHTML) {
+        page.innerHTML = fb;
+        hint.textContent = '已载入浏览器暂存内容；点「🔗 连接数据文件」写入文件，「↺ 恢复原文」丢弃';
+      }
+    } catch (e) {}
+  }
+
+  // ---------- 编辑开关 ----------
+  editBtn.addEventListener('click', function () {
+    editing = !editing;
+    page.contentEditable = editing ? 'true' : 'false';
+    editBtn.textContent = editing ? '✅ 完成编辑' : '✏️ 编辑简历';
+    resetBtn.style.display = editing ? '' : 'none';
+    blockBar.style.display = editing ? 'flex' : 'none';
+    hint.textContent = editing ? '点击文字直接修改；用下方按钮增删板块，改动自动保存' : '';
+    if (editing) page.focus();
+  });
+
+  // ---------- 恢复原文：丢弃浏览器改动，从数据文件重新加载 ----------
+  resetBtn.addEventListener('click', async function () {
+    if (!confirm('从数据文件重新加载？浏览器里未写回文件的修改将丢失。')) return;
+    try { localStorage.removeItem('resume_fallback'); } catch (e) {}
+    try {
+      if (fileHandle) { await loadFromDisk(); hint.textContent = '已从 简历数据.js 重新加载'; }
+      else { location.reload(); }
+    } catch (e) { location.reload(); }
+  });
+
+  // ---------- 导出 PDF ----------
+  pdfBtn.addEventListener('click', function () {
+    if (editing) persist();
+    hint.textContent = '在打印窗口中：目标选「另存为 PDF」，边距选「默认」并勾选「背景图形」';
+    window.print();
+  });
+
+  // ---------- 连接数据文件（首次） ----------
+  connectBtn.addEventListener('click', async function () {
+    try {
+      var handles = await window.showOpenFilePicker({
+        types: [{ description: '简历数据文件', accept: { 'text/javascript': ['.js'] } }],
+        startIn: 'desktop'
+      });
+      fileHandle = handles[0];
+      perm = await fileHandle.requestPermission({ mode: 'readwrite' });
+      if (perm !== 'granted') { hint.textContent = '未授予读写权限，暂用浏览器暂存'; return; }
+      await idbSet('dataFile', fileHandle);
+      await loadFromDisk(); // 磁盘内容为准，同时清除旧的浏览器暂存
+      try { localStorage.removeItem('resume_fallback'); } catch (e) {}
+      connectBtn.style.display = 'none';
+      hint.textContent = '✓ 已连接 简历数据.js (v' + dataVersion + ')，编辑将自动写回文件';
+    } catch (e) {
+      if (e.name !== 'AbortError') hint.textContent = '连接失败：' + e.message;
+    }
+  });
+
+  // ---------- 自动保存 ----------
+  page.addEventListener('input', function () { if (editing) persist(); });
+
+  // ---------- 板块编辑：插入 / 上移 / 下移 / 删除 ----------
+  var blockBar = document.getElementById('blockBar');
+  var anchor = null; // 光标最近所在元素，作为插入和操作的参照点
+
+  function caretEl() {
+    var sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return null;
+    var n = sel.getRangeAt(0).startContainer;
+    var el = n.nodeType === 1 ? n : n.parentNode;
+    return (el && page.contains(el)) ? el : null;
+  }
+  function topLevelOf(el) {
+    if (!el) return null;
+    while (el.parentNode && el.parentNode !== page) el = el.parentNode;
+    return el.parentNode === page ? el : null;
+  }
+  function closestIn(el, sel) {
+    while (el && el !== page) {
+      if (el.matches && el.matches(sel)) return el;
+      el = el.parentNode;
+    }
+    return null;
+  }
+  function rememberAnchor() { var el = caretEl(); if (el) anchor = el; }
+  document.addEventListener('selectionchange', function () { if (editing) rememberAnchor(); });
+  page.addEventListener('mouseup', function () { if (editing) rememberAnchor(); });
+  page.addEventListener('keyup', function () { if (editing) rememberAnchor(); });
+
+  function selectNode(node) {
+    var r = document.createRange();
+    r.selectNode(node); // 选中占位文字，直接打字即替换
+    var s = window.getSelection();
+    s.removeAllRanges(); s.addRange(r);
+  }
+  function newSection() {
+    var d = document.createElement('div');
+    d.className = 'section-title';
+    d.textContent = '新板块';
+    return d;
+  }
+  function newEntry() {
+    var d = document.createElement('div');
+    d.className = 'entry-title';
+    d.innerHTML = '项目名称——一句话定位<span class="role">｜ 角色</span>';
+    d.setAttribute('data-ph', '1');
+    return d;
+  }
+  function newLinkRow() {
+    var d = document.createElement('div');
+    d.className = 'link-row';
+    d.innerHTML = '<a href="#" target="_blank">github.com/链接</a>';
+    return d;
+  }
+  function newItem(text) {
+    var li = document.createElement('li');
+    li.textContent = text || '新要点';
+    return li;
+  }
+  function newList(level) {
+    var ul = document.createElement('ul');
+    ul.className = level;
+    ul.appendChild(newItem());
+    return ul;
+  }
+  function appendAt(node, ref) {
+    if (ref && ref.parentNode === page) page.insertBefore(node, ref.nextSibling);
+    else page.appendChild(node);
+  }
+
+  function insertBlock(kind) {
+    var el = caretEl() || anchor;
+    var top = topLevelOf(el);
+
+    if (kind === 'section') {
+      var s = newSection();
+      appendAt(s, top);
+      selectNode(s.firstChild);
+    } else if (kind === 'entry') {
+      var e = newEntry(), l = newLinkRow();
+      appendAt(e, top);
+      page.insertBefore(l, e.nextSibling);
+      selectNode(e.firstChild);
+    } else if (kind === 'l1') {
+      var li1 = closestIn(el, 'ul.l1 > li');
+      if (li1) {
+        var n1 = newItem();
+        li1.parentNode.insertBefore(n1, li1.nextSibling);
+        selectNode(n1.firstChild);
+      } else {
+        var u1 = closestIn(el, 'ul.l1');
+        if (u1) {
+          var n1b = newItem();
+          u1.appendChild(n1b);
+          selectNode(n1b.firstChild);
+        } else {
+          var nl = newList('l1');
+          appendAt(nl, top);
+          selectNode(nl.firstChild.firstChild);
+        }
+      }
+    } else if (kind === 'l2' || kind === 'l3') {
+      var parentSel = kind === 'l2' ? 'ul.l1 > li' : 'ul.l2 > li';
+      var listSel = kind === 'l2' ? 'ul.l2' : 'ul.l3';
+      var parent = closestIn(el, parentSel);
+      if (!parent) { // 兜底：放进最后一个同级父项
+        var lastList = page.querySelectorAll(parentSel);
+        parent = lastList.length ? lastList[lastList.length - 1] : null;
+      }
+      if (!parent) {
+        hint.textContent = kind === 'l2' ? '请先添加一个「一级要点」' : '请先添加一个「二级要点」';
+        return;
+      }
+      var sub = closestIn(el, listSel);
+      if (sub && parent.contains(sub)) {
+        var nItem = newItem();
+        sub.appendChild(nItem);
+        selectNode(nItem.firstChild);
+      } else {
+        var subNew = newList(kind);
+        parent.appendChild(subNew);
+        selectNode(subNew.firstChild.firstChild);
+      }
+    }
+    rememberAnchor();
+  }
+
+  function applyOp(op) {
+    var b = topLevelOf(caretEl() || anchor);
+    if (!b) { hint.textContent = '请先把光标放在要操作的板块里'; return; }
+    if (op === 'up') {
+      var prev = b.previousElementSibling;
+      if (prev) page.insertBefore(b, prev); else hint.textContent = '已经是第一个板块';
+    } else if (op === 'down') {
+      var next = b.nextElementSibling;
+      if (next) page.insertBefore(next, b); else hint.textContent = '已经是最后一个板块';
+    } else if (op === 'del') {
+      var preview = (b.textContent || '').trim().slice(0, 40);
+      if (!confirm('删除这个板块吗？\n\n' + preview + '…')) return;
+      b.remove();
+      hint.textContent = '已删除板块';
+    }
+    persist();
+  }
+
+  // mousedown 阻止焦点转移，保住正文里的光标位置
+  blockBar.addEventListener('mousedown', function (e) {
+    if (e.target.tagName === 'BUTTON') e.preventDefault();
+  });
+  blockBar.addEventListener('click', function (e) {
+    var btn = e.target.closest ? e.target.closest('button') : null;
+    if (!btn) return;
+    if (btn.dataset.ins) { insertBlock(btn.dataset.ins); persist(); }
+    else if (btn.dataset.op) { applyOp(btn.dataset.op); }
+  });
+
+  // 粘贴只保留纯文字，避免外部样式破坏排版
+  page.addEventListener('paste', function (e) {
+    e.preventDefault();
+    var text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  });
+})();
+</script>
+
+</body>
+</html>
