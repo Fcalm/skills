@@ -1,5 +1,5 @@
 ---
-name: build-resume
+name: resume-html-pdf
 description: Turn resume material (markdown/txt drafts, experience dictated in chat, reference layout screenshots) into a single-page HTML resume that supports in-browser editing and one-click PDF export. Use whenever the user mentions 简历/resume/CV/job-application documents, asks to convert or format a resume as HTML/PDF, sends a resume draft for polishing or layout, or wants to export one to PDF — even if they never say "HTML" or "one page".
 ---
 
